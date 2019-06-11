@@ -14,13 +14,18 @@ class User(models.Model):
     def __str__(self):
         return self.username
 
+    @classmethod
+    def _get_student(cls):
+        return 1
+
 class Planning(models.Model):
-    date = models.DateField()
+    date = models.DateTimeField('date')
+    roledemerde = list({"secretary","instructor"})
     location = models.CharField(max_length=50)
-    owner = models.ForeignKey(User,to_field='id', on_delete=models.CASCADE, related_name='owner')
-    student = models.ForeignKey(User, to_field='id', on_delete=models.CASCADE, related_name='user')
+    owner = models.ForeignKey(User,to_field='id', on_delete=models.CASCADE, related_name='owner', limit_choices_to={"role": roledemerde})
+    student = models.ForeignKey(User, to_field='id', on_delete=models.CASCADE, related_name='user', limit_choices_to={"role": "students"})
     def __str__(self):
-        return self.date
+        return self.location
 
 class UserPlan(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
