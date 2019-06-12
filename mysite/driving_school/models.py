@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import Q
+from django.contrib.auth.models import AbstractUser
 
 
 ROLE_CHOICE = (
@@ -10,28 +11,30 @@ ROLE_CHOICE = (
 
 # Create your models here.
 
-class User(models.Model):
-    username = models.CharField(max_length=50)
+class CustomUser(AbstractUser):
+    username = models.CharField(max_length=50, unique=True)
     password = models.CharField(max_length=50)
     role = models.CharField(max_length=25, choices=ROLE_CHOICE)
+
+    PASSWORD_FIELD = 'password'
+
     def __str__(self):
         return self.username
 
-    @classmethod
-    def _get_student(cls):
-        return 1
 
 class Planning(models.Model):
     date = models.DateTimeField('date')
     location = models.CharField(max_length=50)
-    owner = models.ForeignKey(User,to_field='id', on_delete=models.CASCADE, related_name='owner', limit_choices_to=Q(role="secretary") | Q(role="instructor"))
-    student = models.ForeignKey(User, to_field='id', on_delete=models.CASCADE, related_name='user', limit_choices_to={"role": "students"})
+    owner = models.ForeignKey(CustomUser,to_field='id', on_delete=models.CASCADE, related_name='owner', limit_choices_to=Q(role="secretary") | Q(role="instructor"))
+    student = models.ForeignKey(CustomUser, to_field='id', on_delete=models.CASCADE, related_name='user', limit_choices_to={"role": "students"})
     def __str__(self):
         return self.location
 
 class UserPlan(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    creator = models.ForeignKey(CustomUser,to_field='id', on_delete=models.CASCADE, related_name='secretary', limit_choices_to={'role': 'secretary'}, default=None)
+    user = models.ForeignKey(CustomUser, to_field='id', on_delete=models.CASCADE, related_name='students', limit_choices_to={"role": "students"}, default=None)
     payed_hour = models.IntegerField(default=0)
     lessons = models.IntegerField(default=0)
+
     def __str__(self):
-        return self.owner
+        return self.user.username
