@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import Q
+import django.contrib.admin
 
 
 ROLE_CHOICE = (
@@ -11,8 +12,6 @@ ROLE_CHOICE = (
 # Create your models here.
 
 class User(models.Model):
-    username = models.CharField(max_length=50)
-    password = models.CharField(max_length=50)
     role = models.CharField(max_length=25, choices=ROLE_CHOICE)
     def __str__(self):
         return self.username
