@@ -3,14 +3,21 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-{{ user }}
+<h1 class="cover-heading">Iencli : {{ user }}</h1>
 {% for plan in planning %}
-    {% if student.student == user %}
-    <tr class="{% cycle 'row1' 'row2' 'row3' %}">
-        {{ plan.date }}
-        {{ plan.location }}
-        {{ plan.owner }}
-    </tr>
+    {% if plan.student == user %}
+    <div class="row row-striped">
+            <div class="col-2 text-right">
+                <h1 class="display-4"><span class="badge badge-secondary">{{ plan.date.day }}</span></h1>
+                <h2 id="month">{{ plan.date.month}}</h2>
+            </div>
+            <div class="col-10">
+                <h3 class="text-uppercase"><strong>Heure de Conduite</strong></h3>
+                <p>{{ plan.date }}</p>
+                <p>RDV a : {{ plan.location }}</p>
+                <p>Professor :{{ plan.owner }}</p>
+            </div>
+        </div>
     {% endif %}
 {% endfor %}
 

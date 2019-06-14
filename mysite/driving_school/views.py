@@ -21,4 +21,5 @@ from driving_school.models import Planning
 
 def get_users(request):
     planning = Planning.objects.filter().order_by('date')
+    logging.warning(type(planning))
     return render(request, 'student.html', {'planning': planning})
