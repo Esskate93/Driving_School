@@ -4,7 +4,14 @@
 
 {% block content %}
 {{ user }}
-{{ planning }}
-
+{% for student in planning %}
+    {% if student.student == user %}
+    <tr class="{% cycle 'row1' 'row2' 'row3' %}">
+        {{ student.date }}
+        {{ student.location }}
+        {{ student.owner }}
+    </tr>
+    {% endif %}
+{% endfor %}
 
 {% endblock %}
