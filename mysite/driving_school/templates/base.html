@@ -21,14 +21,48 @@
     background-color: #16161d;
     border: 1px solid black;
     border-radius:5px;
+    overflow-y: auto;
+    max-height: 600px;
   }
   .center{
     display: flex;
     justify-content: center;
     flex-direction: column;
   }
+  /* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
 </style>
 <body class="bg">
+  {% if user.is_authenticated %}
+Hi {{ user.username }}!
+    <nav class="navbar fixed-top navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">Auto Ecole de la CITE</a>
+      <a class="navbar-brand" href="{% url 'logout' %}">logout</a>
+    </nav>
+    {% else %}
+    <nav class="navbar fixed-top navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Auto Ecole de la CITE</a>
+        <a class="navbar-brand" href="{% url 'login' %}">login</a>
+        <p>You are not logged in</p>
+      </nav>
+{% endif %}
   <div class="cover-container text-center container center">
   <main role="main" class="inner cover planning">
     {% block content %}
